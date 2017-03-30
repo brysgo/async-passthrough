@@ -1,0 +1,16 @@
+{
+  "name": "async-passthrough",
+  "version": "0.0.1",
+  "description": "Support async models without all the politics",
+  "main": "index.js",
+  "author": "Bryan Goldstein <brysgo@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "co": "^4.6.0",
+    "jest": "^19.0.2",
+    "prettier": "^0.22.0"
+  },
+  "dependencies": {
+    "debug": "^2.6.3"
+  }
+}
