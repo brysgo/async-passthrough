@@ -47,4 +47,19 @@ describe("thunk", () => {
     );
     callback("test thunk in array");
   });
+
+  it("returns a thunk", function(done) {
+    let callback;
+    const thunk = deferrableOrImmediate(
+      arrayOrDeferrable([cb => callback = cb]),
+      function(result) {
+        expect(result).toEqual(["test thunk in array"]);
+      }
+    );
+    thunk(function(result) {
+      expect(result).toEqual(["test thunk in array"]);
+      done();
+    });
+    callback("test thunk in array");
+  });
 });

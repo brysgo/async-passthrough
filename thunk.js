@@ -16,18 +16,27 @@ function arrayOrDeferrable(arr) {
   if (arr.some(detect)) {
     return function(cb) {
       const newArr = Array.from(arr);
+      let resolve = cb;
       let count = arr.length;
       arr.forEach((a, i) => {
         if (detect(a)) {
           a(function(val) {
             newArr[i] = val;
             count--;
-            if (count <= 0) cb(newArr);
+            if (count <= 0) {
+              resolve(newArr);
+            }
           });
         } else {
           newArr[i] = a;
         }
       });
+      return cb2 => {
+        resolve = res => {
+          cb(res);
+          cb2(res);
+        };
+      };
     };
   } else {
     return arr;
