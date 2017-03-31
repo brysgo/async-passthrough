@@ -1,15 +1,10 @@
-const thunks = require("thunks");
 const Debug = require("debug");
-
-const thunk = thunks();
 
 const debug = Debug("async-passthrough/thunk");
 
 function deferrableOrImmediate(obj, fn) {
   if (detect(obj)) {
-    debug({ obj });
-    return obj(function(err, result) {
-      debug({ err, result });
+    return obj(function(result) {
       fn(result);
     });
   } else {
@@ -17,7 +12,27 @@ function deferrableOrImmediate(obj, fn) {
   }
 }
 
-function arrayOrDeferrable(arr) {}
+function arrayOrDeferrable(arr) {
+  if (arr.some(detect)) {
+    return function(cb) {
+      const newArr = Array.from(arr);
+      let count = arr.length;
+      arr.forEach((a, i) => {
+        if (detect(a)) {
+          a(function(val) {
+            newArr[i] = val;
+            count--;
+            if (count <= 0) cb(newArr);
+          });
+        } else {
+          newArr[i] = a;
+        }
+      });
+    };
+  } else {
+    return arr;
+  }
+}
 
 module.exports = {
   deferrableOrImmediate,
@@ -25,5 +40,5 @@ module.exports = {
 };
 
 function detect(item) {
-  return thunks.isThunkableFn(item);
+  return typeof item === "function";
 }
