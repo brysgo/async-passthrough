@@ -8,7 +8,8 @@
   "devDependencies": {
     "co": "^4.6.0",
     "jest": "^19.0.2",
-    "prettier": "^0.22.0"
+    "prettier": "^0.22.0",
+    "thunks": "^4.7.6"
   },
   "dependencies": {
     "debug": "^2.6.3"
